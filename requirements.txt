@@ -1,0 +1,13 @@
+Flask
+google-api-python-client
+google-auth
+google-cloud-language
+google-cloud-speech
+google-cloud-vision
+gunicorn
+sqlalchemy 
+sqlalchemy-cockroachdb
+pocketsphinx
+psycopg2-binary
+python-dotenv
+testresources
