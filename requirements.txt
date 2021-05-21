@@ -7,7 +7,6 @@ google-cloud-vision
 gunicorn
 sqlalchemy 
 sqlalchemy-cockroachdb
-pocketsphinx
 psycopg2-binary
 python-dotenv
 testresources
