@@ -57,7 +57,6 @@ with open("tokenizerM.pickle", "rb") as handle:
 
 model = keras.models.load_model("SDetector")
 print("Model loaded!")
-# model = tf.saved_model.load("SDetector")
 
 
 def predict(msg):
