@@ -57,7 +57,7 @@ with open("tokenizerM.pickle", "rb") as handle:
     tokenizer = pickle.load(handle)
 
 model = keras.models.load_model("SDetector")
-
+# model = tf.saved_model.load("SDetector")
 
 def predict(msg):
     test_sequences = tokenizer.texts_to_sequences([msg])
@@ -87,7 +87,7 @@ def home():
     return str(keyid)
 
 
-@app.route("/bot", method=["POST", "GET"])
+@app.route("/bot", methods=["POST", "GET"])
 def bot():
     incoming_msg = request.values.get("Body", "").lower()
     sess_id, text = incoming_msg.split("###")
