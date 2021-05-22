@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
+import logging
 import pickle
+import sys
+import uuid
 
 import numpy as np
 import pexpect  # dependency of ParlAI
 from flask import Flask, request, session
 from tensorflow import keras
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-import uuid
-import logging
-import sys
 
 
 class ChatBot:
@@ -56,6 +56,7 @@ with open("tokenizerM.pickle", "rb") as handle:
     tokenizer = pickle.load(handle)
 
 model = keras.models.load_model("SDetector")
+print("Model loaded!")
 # model = tf.saved_model.load("SDetector")
 
 
@@ -75,13 +76,12 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return "Hello!!!!!! World!!!!!!!!"
 
 
 @app.route("/init")
 def home():
-    #! Guarantees a unique session ID
-    session_id = str(uuid.uuid4())
+    session_id = str(uuid.uuid4())  # Guarantees a unique session ID
     session[session_id] = {
         "msg_history": "",
         "id": session_id,
