@@ -72,6 +72,8 @@ app = Flask(__name__)
 app.secret_key = "abc"
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
+chatbot = ChatBot()
+
 
 @app.route("/")
 def hello():
@@ -85,7 +87,6 @@ def home():
         "msg_history": "",
         "id": session_id,
         "question": 0,
-        "bot": ChatBot(),
     }
     return str(session_id)
 
@@ -120,8 +121,8 @@ def bot():
         return return_msg
 
     else:
-        session[sess_id]["bot"].send_request(incoming_msg)
-        return_msg = session[sess_id]["bot"].get_response()
+        chatbot.send_request(incoming_msg)
+        return_msg = chatbot.get_response()
         return return_msg
 
 
