@@ -17,7 +17,7 @@ class ChatBot:
             "parlai interactive -t blended_skill_talk -mf zoo:blender/blender_90M/model",
             timeout=None,
         )
-        # self.child.expect("Enter Your Message:")
+        self.child.expect("Enter Your Message:")
         self.personality = self.child.before.decode("utf-8", "ignore").split(
             "[context]"
         )[1]
@@ -28,7 +28,7 @@ class ChatBot:
 
     def send_request(self, req):
         self.child.sendline(req)
-        # self.child.expect("Enter Your Message:")
+        self.child.expect("Enter Your Message:")
 
 
 subreddits = [
@@ -75,7 +75,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 @app.route("/")
 def hello():
-    return "Hello!!!!!! World!!!!!!!!"
+    return "Hello fixed decode!!!!!! World!!!!!!!!"
 
 
 @app.route("/init")
