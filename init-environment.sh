@@ -14,7 +14,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 
 # Install security updates:
-# apt-get -y upgrade
+apt-get -y upgrade
 
 # Install a new package, without unnecessary recommended packages:
 apt-get -y install --no-install-recommends git python3
