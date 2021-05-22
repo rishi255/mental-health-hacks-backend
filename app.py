@@ -17,10 +17,10 @@ class ChatBot:
             "parlai interactive -t blended_skill_talk -mf zoo:blender/blender_90M/model",
             timeout=None,
         )
-        self.child.expect("Enter Your Message:")
-        self.personality = self.child.before.decode("utf-8", "ignore").split(
-            "[context]"
-        )[1]
+        # self.child.expect("Enter Your Message:")
+        # self.personality = self.child.before.decode("utf-8", "ignore").split(
+        #     "[context]"
+        # )[1]
 
     def get_response(self):
         response = (self.child.before.split(b"1m"))[1].split(b"\x1b")
@@ -28,7 +28,7 @@ class ChatBot:
 
     def send_request(self, req):
         self.child.sendline(req)
-        self.child.expect("Enter Your Message:")
+        # self.child.expect("Enter Your Message:")
 
 
 subreddits = [
