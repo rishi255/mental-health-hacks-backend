@@ -3,22 +3,21 @@ import pickle
 
 import numpy as np
 import pexpect  # dependency of ParlAI
-import requests
-import tensorflow as tf
-from flask import *
+from flask import Flask, request, session
 from tensorflow import keras
-from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
+import uuid
+import logging
+import sys
 
 
 class ChatBot:
     def __init__(self):
         self.child = pexpect.spawn(
-            "python ParlAI/parlai/scripts/interactive.py -t blended_skill_talk -mf zoo:blender/blender_90M/model",
+            "parlai interactive -t blended_skill_talk -mf zoo:blender/blender_90M/model",
             timeout=None,
         )
-        self.child.expect("Enter Your Message:")
+        # self.child.expect("Enter Your Message:")
         self.personality = self.child.before.decode("utf-8", "ignore").split(
             "[context]"
         )[1]
@@ -29,7 +28,7 @@ class ChatBot:
 
     def send_request(self, req):
         self.child.sendline(req)
-        self.child.expect("Enter Your Message:")
+        # self.child.expect("Enter Your Message:")
 
 
 subreddits = [
@@ -59,6 +58,7 @@ with open("tokenizerM.pickle", "rb") as handle:
 model = keras.models.load_model("SDetector")
 # model = tf.saved_model.load("SDetector")
 
+
 def predict(msg):
     test_sequences = tokenizer.texts_to_sequences([msg])
     test_padded = pad_sequences(
@@ -69,7 +69,8 @@ def predict(msg):
 
 
 app = Flask(__name__)
-# run_with_ngrok(app)
+app.secret_key = "abc"
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 @app.route("/")
@@ -77,21 +78,25 @@ def hello():
     return "Hello World!"
 
 
-@app.route("/init", methods=["POST", "GET"])
+@app.route("/init")
 def home():
-    global keyid
-    incoming_msg = request.values.get("Body", "").lower()
-    session[keyid] = {"msg_history": "", "id": keyid, "question": 0, "bot": ChatBot()}
-    retval = keyid
-    keyid += 1
-    return str(keyid)
+    #! Guarantees a unique session ID
+    session_id = str(uuid.uuid4())
+    session[session_id] = {
+        "msg_history": "",
+        "id": session_id,
+        "question": 0,
+        "bot": ChatBot(),
+    }
+    return str(session_id)
 
 
-@app.route("/bot", methods=["POST", "GET"])
+@app.route("/bot")
 def bot():
-    incoming_msg = request.values.get("Body", "").lower()
-    sess_id, text = incoming_msg.split("###")
-    sess_id = int(sess_id)
+    sess_id = request.values.get("id", "").lower()
+    incoming_msg = request.values.get("msg", "").lower()
+    print(incoming_msg)
+    # text = incoming_msg
     msg_history = session[sess_id]["msg_history"]
 
     if incoming_msg == "clear":
@@ -119,3 +124,7 @@ def bot():
         session[sess_id]["bot"].send_request(incoming_msg)
         return_msg = session[sess_id]["bot"].get_response()
         return return_msg
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
