@@ -9,6 +9,7 @@ sqlalchemy-cockroachdb
 psycopg2-binary
 python-dotenv
 testresources
-git+https://github.com/facebookresearch/ParlAI.git
+# git+https://github.com/facebookresearch/ParlAI.git
+parlai
 PyYAML
 tensorflow
