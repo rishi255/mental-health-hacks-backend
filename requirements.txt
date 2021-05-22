@@ -1,12 +1,14 @@
 Flask
-google-api-python-client
-google-auth
-google-cloud-language
-google-cloud-speech
+# google-api-python-client
+# google-auth
+# google-cloud-language
+# google-cloud-speech
 gunicorn
 sqlalchemy 
 sqlalchemy-cockroachdb
 psycopg2-binary
 python-dotenv
 testresources
-praw
+git+https://github.com/facebookresearch/ParlAI.git
+PyYAML
+tensorflow

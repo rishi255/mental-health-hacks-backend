@@ -18,6 +18,9 @@ apt-get update
 
 # Install a new package, without unnecessary recommended packages:
 # apt-get -y install --no-install-recommends libasound2-dev libpulse-dev pocketsphinx pulseaudio swig gcc
+
+# Upgrade pip, then install all requirements
+pip install -U pip
 pip install -r requirements.txt
 
 # Delete cached files we don't need anymore (note that if you're
