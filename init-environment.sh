@@ -17,7 +17,7 @@ apt-get update
 # apt-get -y upgrade
 
 # Install a new package, without unnecessary recommended packages:
-apt-get -y install --no-install-recommends git
+# apt-get -y install --no-install-recommends git
 
 # Upgrade pip, then install all requirements
 pip install -U pip setuptools wheel
