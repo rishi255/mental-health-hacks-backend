@@ -6,7 +6,7 @@ import uuid
 
 import numpy as np
 import pexpect  # dependency of ParlAI
-from flask import Flask, request, session
+from flask import Flask, request, session, make_response
 from tensorflow import keras
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
@@ -98,14 +98,20 @@ def home():
         "id": session_id,
         "question": 0,
     }
-    return str(session_id)
+    print("Session dict FROM INIT:", session)
+    r = make_response(str(session_id))
+    header = r.headers
+    header["Access-Control-Allow-Origin"] = "*"
+    return r
 
 
 @app.route("/bot")
 def bot():
     sess_id = request.values.get("id", "").lower()
     incoming_msg = request.values.get("msg", "").lower()
-    print(incoming_msg)
+    print(f"Incoming message: {incoming_msg}")
+    print(f"Session dict FROM BOT:", session)
+
     # text = incoming_msg
     msg_history = session[sess_id]["msg_history"]
 
@@ -128,12 +134,17 @@ def bot():
     session[sess_id]["question"] += 1
     if session[sess_id]["question"] != 0 and session[sess_id]["question"] % 5 == 0:
         return_msg = f"You are showing symptoms of {most_pred} according to our analysis. If you are satisfied with it you can write 'done'. Else write 'okay' to continue."
-        return return_msg
-
+        # r = return_msg
     else:
         chatbot.send_request(incoming_msg)
         return_msg = chatbot.get_response()
-        return return_msg
+        # return return_msg
+
+    resp = make_response(return_msg)
+    header = resp.headers
+    header = resp.headers
+    header["Access-Control-Allow-Origin"] = "*"
+    return resp
 
 
 if __name__ == "__main__":
