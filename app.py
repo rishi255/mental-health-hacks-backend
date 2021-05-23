@@ -17,18 +17,27 @@ class ChatBot:
             "parlai interactive -t blended_skill_talk -mf zoo:blender/blender_90M/model",
             timeout=None,
         )
-        # self.child.expect("Enter Your Message:")
+        print("Child loaded!")
         # self.personality = self.child.before.decode("utf-8", "ignore").split(
         #     "[context]"
         # )[1]
 
     def get_response(self):
-        response = (self.child.before.split(b"1m"))[1].split(b"\x1b")
-        return response[0].decode("utf-8")
+        print("Inside get response!")
+        response = (self.child.before.split(b"1m"))[1]
+        print("After first split:", response)
+        response = response.split(b"\x1b")
+        print("After second split:", response)
+        response = response[0].decode("utf-8")
+        print("Final:", response)
+        return response
 
     def send_request(self, req):
+        self.child.expect("Enter Your Message:")
         self.child.sendline(req)
-        # self.child.expect("Enter Your Message:")
+        self.child.expect("Enter Your Message:")
+        self.child.sendline(req)
+        print("Second sendline done! (request:", req, ")")
 
 
 subreddits = [
@@ -73,6 +82,7 @@ app.secret_key = "abc"
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 chatbot = ChatBot()
+print("ChatBot created!")
 
 
 @app.route("/")
